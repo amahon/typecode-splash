@@ -1,0 +1,29 @@
+version: "2"
+services:
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: env/local/frontend/Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - client
+
+  client:
+    build:
+      context: ../..
+      dockerfile: env/local/client/Dockerfile
+    env_file: ./env
+    volumes:
+      - ../../client:/app
+      - client_modules:/app/node_modules
+    ports:
+      - "8000:8000"
+    command: ['npm', 'run-script', 'dev:server']
+
+volumes:
+
+  client_modules:
+    external: false
+
